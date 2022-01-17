@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+</h:head>
+
+<h:body>
+    <h:form id="mainForm">
+        <p:tabView id="tabView"
+                   dynamic="true">
+
+            <p:ajax event="tabChange"
+                    process="@this"
+                    update=":mainForm:tabView"/>
+
+            <p:tab id="dummy" title="Dummy">
+                <h:outputText value="Just here to allow switching"/>
+                <br/>
+                <p:commandButton value="Remove invalid entry"
+                                 update=":mainForm:tabView"
+                                 action="#{invalidCharModel.removeInvalidEntries}"/>
+            </p:tab>
+            <p:tab id="invalidChar" title="Invalid Char Demo">
+                <p:dataTable value="#{invalidCharModel.entries}" var="entry">
+                    <p:column headerText="Key">
+                        <h:outputText value="${entry.key}"/>
+                    </p:column>
+                    <p:column headerText="Value"
+                              sortBy="#{entry.value}"
+                              paginator="true" paginatorAlwaysVisible="false"
+                              paginatorPosition="bottom">
+                        <h:outputText value="${entry.value}"/>
+                    </p:column>
+                </p:dataTable>
+
+                <h:inputText value="#{invalidCharModel.newEntry}"/>
+                <p:commandButton value="Add"
+                                 update=":mainForm:tabView"
+                                 process="@form"
+                                 action="#{invalidCharModel.addNewEntry}"/>
+
+                <p:commandButton value="Add invalid entry"
+                                 update=":mainForm:tabView"
+                                 action="#{invalidCharModel.addInvalidEntry}"/>
+            </p:tab>
+        </p:tabView>
+    </h:form>
+</h:body>
+</html>
